@@ -24,3 +24,13 @@
 ## 실습편
 
 * [Linux 기초](practices/18-linux.md)
+* [NGS 시퀀싱과 Fastq 파일 처리](practices/19-ngs-fastq.md)
+* [시퀀스 정렬](practices/20-alignment.md)
+* [SAM/BAM 파일 처리](practices/21-sam-bam.md)
+* [변이 찾기](practices/22-variant-calling.md)
+* [전사체 분석 파이프라인 구축](practices/23-transcriptome-snakemake.md)
+* [주피터 노트북 기반 차등 발현 분석](practices/24-jupyter-analysis.md)
+* [단일세포 전사체 분석](practices/25-scrnaseq-analysis.md)
+* [Deconvolution과 유전자 조절 네트워크 분석](practices/26-deconvolution-grn.md)
+* [딥러닝 기반 세포 유형 분류](practices/27-deep-learning-classifier.md)
+* [공간 전사체학 분석](practices/28-spatial-transcriptomics.md)

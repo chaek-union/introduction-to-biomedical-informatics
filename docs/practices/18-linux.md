@@ -44,10 +44,6 @@ GNU(GNU is not UNIX!)는 자유 소프트웨어 재단의 주요 프로젝트 �
 
 GNU 프로젝트의 유틸리티와 리눅스 커널의 결합으로 GNU/Linux 시스템이 탄생했다. 이 시스템은 유닉스와 완전히 호환되는 POSIX 준수 시스템으로, 현재 99% 이상의 서버 시스템이 리눅스를 채택하고 있다.
 
-![스톨만과 토발즈](../assets/images/richard-and-linus.png)
-
-**Figure 18.2** 리처드 스톨만과 리누스 토발즈
-
 현재는 이 시스템을 간단히 "리눅스"라고 부르는 것이 일반적이다. 이는 시스템에 포함된 모든 소프트웨어가 GPL을 따르는 것은 아니기 때문이다. 물론 리처드 스톨만은 리눅스라는 명칭보다는 GNU/Linux라는 명칭을 선호한다.
 
 ## 리눅스 배포판
@@ -86,9 +82,21 @@ GNU 프로젝트의 유틸리티와 리눅스 커널의 결합으로 GNU/Linux �
 
 디렉토리는 파일 및 다른 디렉토리를 포함할 수 있는 논리적 공간을 의미한다. 윈도우의 "폴더"와 같은 개념이다.
 
-![파일 시스템 경로](../assets/images/linux-paths.png)
+![파일 시스템 경로](../assets/images/linux-paths.jpg)
 
-**Figure 18.3** 리눅스 파일 시스템의 경로 구조와 절대경로/상대경로
+**Figure 18.2** 리눅스 파일 시스템의 경로 구조와 절대경로/상대경로
+
+### 주요 디렉토리 구조
+
+리눅스의 주요 디렉토리는 다음과 같다:
+
+- **/bin**: 기본 실행 파일들이 저장된다. ls, cp, mv 등의 명령어가 이 디렉토리에 있다.
+- **/home**: 사용자들의 홈 디렉토리가 저장된다. 각 사용자는 /home/사용자명 형태의 개인 공간을 가진다.
+- **/opt**: 추가적인 소프트웨어 패키지가 설치된다.
+- **/tmp**: 임시 파일이 저장되는 공간이다. 시스템 재부팅 시 삭제될 수 있다.
+- **/usr**: 사용자 프로그램과 데이터가 저장된다. /usr/bin, /usr/lib 등의 하위 디렉토리를 포함한다.
+- **/var**: 가변 데이터 파일이 저장된다. 로그 파일, 데이터베이스 등이 여기에 위치한다.
+- **/etc**: 시스템 설정 파일이 저장된다.
 
 ### 쉘 (Shell)
 
@@ -99,55 +107,119 @@ GNU 프로젝트의 유틸리티와 리눅스 커널의 결합으로 GNU/Linux �
 - bash: GNU Bourne-Again Shell (GNU 프로젝트 표준 쉘)
 - csh, zsh, fish 등: 편의기능이 추가된 쉘
 
-## 가상 환경 구축: Conda
+## 가상 환경 구축
 
-Conda는 프로젝트별로 분리된 가상 환경을 구축할 수 있게 해주는 도구이다. 이는 서로 다른 프로젝트에서 서로 다른 버전의 소프트웨어를 사용해야 할 때 특히 유용하다.
+프로젝트별로 분리된 가상 환경을 구축하면 서로 다른 프로젝트에서 서로 다른 버전의 소프트웨어를 사용할 수 있다. 생명정보학에서는 주로 두 가지 도구를 상호 보완적으로 사용한다:
 
-예를 들어, `project1`에서는 Python 3.4가 필요하고, `project2`에서는 Python 3.10이 필요한 경우, Conda를 사용하면 두 프로젝트의 환경을 분리하여 서로 다른 버전의 파이썬을 설치할 수 있다.
+- **Micromamba**: 소프트웨어 관리 (R, samtools 등 비Python 도구 설치)
+- **uv**: Python 패키지 관리
 
-### Conda 설치
+최근에는 Python 패키지 관리에 Conda를 사용하지 않는 추세이다. Python 패키지는 uv로 관리하고, R이나 기타 생명정보학 소프트웨어는 Micromamba로 관리하는 것이 효율적이다.
 
-Conda는 처리 속도가 느린 편이므로, 더 빠른 속도로 동작하는 Conda의 클론인 Micromamba를 설치하는 것을 추천한다. Micromamba는 https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html 에서 설치할 수 있다.
+### Micromamba: 소프트웨어 관리
 
-### 가상환경 생성 예제
+Micromamba는 Conda의 빠른 대안으로, R이나 생명정보학 도구를 설치하는 데 적합하다.
 
-다음은 두 가지 가상환경을 생성하고, 서로 다른 버전의 Python을 설치하는 예제이다:
+#### Micromamba 설치
 
 ```bash
-# project1 환경 생성 (Python 3.9)
-$ micromamba create -n project1 python=3.9
-$ micromamba activate project1
-(project1) $ python --version
-Python 3.9.x
+$ curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
+$ ./bin/micromamba shell init -s bash -p ~/micromamba
+$ source ~/.bashrc
+```
 
-# 필요한 패키지 설치
-(project1) $ micromamba install -c conda-forge numpy pandas matplotlib
-(project1) $ python -c "import numpy; print(numpy.__version__)"
-1.xx.x
+#### Micromamba 사용 예제
 
-# 환경 비활성화
-(project1) $ micromamba deactivate
+```bash
+# R 환경 생성 및 R 설치
+$ micromamba create -n r-env r-base r-tidyverse
+$ micromamba activate r-env
+(r-env) $ R --version
+R version 4.x.x
 
-# project2 환경 생성 (Python 3.13)
-$ micromamba create -n project2 python=3.13
-$ micromamba activate project2
-(project2) $ python --version
-Python 3.13.x
-
-# 필요한 패키지 설치 (동일한 패키지, 다른 버전)
-(project2) $ micromamba install -c conda-forge numpy pandas matplotlib
-(project2) $ python -c "import numpy; print(numpy.__version__)"
-2.xx.x
+# 생명정보학 도구 설치
+$ micromamba create -n bioinfo samtools bwa bedtools
+$ micromamba activate bioinfo
+(bioinfo) $ samtools --version
 
 # 환경 비활성화
-(project2) $ micromamba deactivate
+(bioinfo) $ micromamba deactivate
 
 # 설치된 환경 목록 확인
 $ micromamba env list
 ```
 
-이 예제에서는 micromamba를 사용하여 두 개의 독립된 가상환경(project1과 project2)을 생성하고, 각각 Python 3.9와 Python 3.13을 설치했다. 각 환경에서는 동일한 패키지(numpy, pandas, matplotlib)를 설치했지만, Python 버전이 다르기 때문에 패키지 버전도 다를 수 있다.
-각 환경은 완전히 독립적이므로, 한 환경에서의 변경이 다른 환경에 영향을 주지 않는다. 이는 서로 다른 버전의 패키지가 필요한 여러 프로젝트를 동시에 진행할 때 매우 유용하다.
+### uv: Python 패키지 관리
+
+uv는 Rust로 작성된 빠르고 현대적인 Python 패키지 매니저이다. 기존의 pip, conda보다 훨씬 빠른 속도를 제공한다.
+
+#### uv 설치
+
+```bash
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+#### uv 기본 사용법
+
+uv는 `uv run` 명령어를 통해 가상환경을 명시적으로 활성화하지 않고도 Python 스크립트를 실행할 수 있다.
+
+```bash
+# 프로젝트 디렉토리 생성
+$ mkdir project1
+$ cd project1
+
+# 가상환경 생성
+$ uv venv
+
+# 패키지 설치
+$ uv pip install numpy pandas matplotlib
+
+# Python 스크립트 실행 (가상환경 자동 사용)
+$ uv run python script.py
+
+# Python 버전 확인
+$ uv run python --version
+
+# 패키지 버전 확인
+$ uv run python -c "import numpy; print(numpy.__version__)"
+```
+
+#### 가상환경 생성 예제
+
+다음은 두 가지 프로젝트에서 서로 다른 버전의 Python을 사용하는 예제이다:
+
+```bash
+# project1 환경 생성 (Python 3.9)
+$ mkdir project1 && cd project1
+$ uv venv --python 3.9
+$ uv run python --version
+Python 3.9.x
+
+# 필요한 패키지 설치
+$ uv pip install numpy pandas matplotlib
+$ uv run python -c "import numpy; print(numpy.__version__)"
+1.xx.x
+
+# project2 환경 생성 (Python 3.13)
+$ mkdir ../project2 && cd ../project2
+$ uv venv --python 3.13
+$ uv run python --version
+Python 3.13.x
+
+# 필요한 패키지 설치 (동일한 패키지, 다른 버전)
+$ uv pip install numpy pandas matplotlib
+$ uv run python -c "import numpy; print(numpy.__version__)"
+2.xx.x
+```
+
+### Micromamba와 uv의 상호 보완적 사용
+
+두 도구는 각자의 강점이 있으므로 함께 사용하는 것이 효과적이다:
+
+- **Micromamba 사용**: R, samtools, bwa, bedtools 등 비Python 소프트웨어 설치
+- **uv 사용**: numpy, pandas, biopython 등 Python 패키지 관리
+
+예를 들어, R과 Python을 함께 사용하는 프로젝트에서는 Micromamba로 R을 설치하고, uv로 Python 패키지를 관리할 수 있다.
 
 ## 생명정보학 문제 해결: Rosalind
 
@@ -162,7 +234,7 @@ Rosalind는 생명정보학 문제풀이 웹사이트(https://rosalind.info/)로
 
 ![pwd 명령어](../assets/images/pwd.png)
 
-**Figure 18.4** pwd 명령어를 통한 현재 작업 디렉토리 확인
+**Figure 18.3** pwd 명령어를 통한 현재 작업 디렉토리 확인
 
 - **cd** (Change Directory): 디렉토리 변경
   - 탭키를 활용하여 긴 경로를 쉽게 입력할 수 있다.
@@ -194,7 +266,7 @@ Rosalind는 생명정보학 문제풀이 웹사이트(https://rosalind.info/)로
 
 ![htop 화면](../assets/images/htop.png)
 
-**Figure 18.5** htop을 이용한 시스템 리소스 모니터링
+**Figure 18.4** htop을 이용한 시스템 리소스 모니터링
 
 ### 파일 조작
 
@@ -204,9 +276,252 @@ Rosalind는 생명정보학 문제풀이 웹사이트(https://rosalind.info/)로
 
 ![nano 에디터](../assets/images/nano.png)
 
-**Figure 18.6** nano 텍스트 에디터의 인터페이스와 기본 사용법
+**Figure 18.5** nano 텍스트 에디터의 인터페이스와 기본 사용법
 
 - **wget**: 인터넷에서 파일 다운로드
+- **ln -s**: 심볼릭 링크 생성
+  - `ln -s 원본파일 링크파일`
+  - 심볼릭 링크는 원본 파일을 가리키는 바로가기와 같다.
+
+## 표준 입출력과 리다이렉션
+
+리눅스에서는 프로그램의 입출력을 다른 파일이나 프로그램으로 연결할 수 있다. 이를 리다이렉션(Redirection)이라고 한다.
+
+### 표준 스트림
+
+리눅스의 모든 프로세스는 세 가지 표준 스트림을 가진다:
+
+- **stdin (표준 입력, 파일 디스크립터 0)**: 키보드로부터의 입력
+- **stdout (표준 출력, 파일 디스크립터 1)**: 화면으로의 일반 출력
+- **stderr (표준 에러, 파일 디스크립터 2)**: 화면으로의 에러 메시지 출력
+
+### 리다이렉션 연산자
+
+```bash
+# 표준 출력을 파일로 저장 (덮어쓰기)
+$ ls > file_list.txt
+
+# 표준 출력을 파일로 저장 (추가)
+$ ls >> file_list.txt
+
+# 표준 에러를 파일로 저장
+$ command 2> error.log
+
+# 표준 출력과 표준 에러를 모두 파일로 저장
+$ command > output.txt 2>&1
+# 또는
+$ command &> output.txt
+
+# 파일 내용을 표준 입력으로 사용
+$ sort < unsorted.txt
+```
+
+### 파이프 (Pipe)
+
+파이프(`|`)는 한 명령어의 출력을 다른 명령어의 입력으로 연결한다:
+
+```bash
+# ls 출력을 grep으로 필터링
+$ ls -la | grep ".txt"
+
+# 파일 내용을 정렬하고 중복 제거
+$ cat data.txt | sort | uniq
+
+# 단어 개수 세기
+$ cat document.txt | wc -w
+
+# 여러 파이프 연결
+$ zcat large_file.gz | grep "pattern" | sort | uniq -c | head -10
+```
+
+### 프로세스 치환 (Process Substitution)
+
+프로세스 치환 `<()`는 명령어의 출력을 임시 파일처럼 사용할 수 있게 한다:
+
+```bash
+# 두 명령어의 출력을 비교
+$ diff <(sort file1.txt) <(sort file2.txt)
+
+# 두 디렉토리의 파일 목록 비교
+$ diff <(ls dir1) <(ls dir2)
+```
+
+## grep과 정규표현식
+
+### grep 명령어
+
+grep은 파일에서 특정 패턴을 검색하는 명령어이다:
+
+```bash
+# 기본 사용법
+$ grep "pattern" filename
+
+# 대소문자 무시
+$ grep -i "pattern" filename
+
+# 줄 번호 표시
+$ grep -n "pattern" filename
+
+# 패턴이 없는 줄 출력
+$ grep -v "pattern" filename
+
+# 재귀적으로 디렉토리 내 모든 파일 검색
+$ grep -r "pattern" directory/
+
+# 일치하는 파일명만 출력
+$ grep -l "pattern" *.txt
+```
+
+### 정규표현식 (Regular Expression)
+
+정규표현식은 문자열 패턴을 표현하는 방법이다:
+
+- `.`: 임의의 한 문자
+- `*`: 앞 문자가 0번 이상 반복
+- `+`: 앞 문자가 1번 이상 반복
+- `?`: 앞 문자가 0번 또는 1번
+- `^`: 줄의 시작
+- `$`: 줄의 끝
+- `[abc]`: a, b, c 중 하나
+- `[a-z]`: a부터 z까지 중 하나
+- `[^abc]`: a, b, c가 아닌 문자
+- `\d`: 숫자 (0-9)
+- `\s`: 공백 문자
+- `\w`: 단어 문자 (알파벳, 숫자, 밑줄)
+
+```bash
+# 확장 정규표현식 사용 (-E 옵션)
+$ grep -E "^chr[0-9]+\s" genome.bed
+
+# FASTA 파일에서 헤더 라인만 추출
+$ grep "^>" sequences.fasta
+
+# 특정 패턴으로 시작하는 줄 찾기
+$ grep -E "^ATCG" dna_sequences.txt
+
+# 이메일 패턴 찾기
+$ grep -E "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" contacts.txt
+```
+
+## 쉘 스크립트
+
+쉘 스크립트는 여러 명령어를 파일에 저장하여 자동으로 실행할 수 있게 하는 프로그램이다.
+
+### 기본 구조
+
+```bash
+#!/bin/bash
+# 이것은 주석이다
+
+echo "Hello, World!"
+```
+
+스크립트 파일의 첫 줄 `#!/bin/bash`는 셔뱅(shebang)이라고 하며, 이 스크립트를 실행할 인터프리터를 지정한다.
+
+### 변수
+
+```bash
+# 변수 선언 (= 양쪽에 공백 없음)
+name="Bioinformatics"
+count=10
+
+# 변수 사용
+echo $name
+echo "Count is: $count"
+
+# 명령어 결과를 변수에 저장
+current_dir=$(pwd)
+file_count=$(ls | wc -l)
+```
+
+### 조건문 (if)
+
+```bash
+#!/bin/bash
+
+file="data.txt"
+
+if [ -f "$file" ]; then
+    echo "파일이 존재한다."
+elif [ -d "$file" ]; then
+    echo "디렉토리이다."
+else
+    echo "파일이 존재하지 않는다."
+fi
+```
+
+조건 테스트 연산자:
+- `-f file`: 파일이 존재하고 일반 파일인지
+- `-d dir`: 디렉토리가 존재하는지
+- `-e path`: 경로가 존재하는지
+- `-z string`: 문자열이 비어있는지
+- `-n string`: 문자열이 비어있지 않은지
+- `$a -eq $b`: 숫자가 같은지
+- `$a -ne $b`: 숫자가 다른지
+- `$a -lt $b`: a가 b보다 작은지
+- `$a -gt $b`: a가 b보다 큰지
+
+### 반복문 (for)
+
+```bash
+#!/bin/bash
+
+# 리스트 순회
+for fruit in apple banana cherry; do
+    echo "Fruit: $fruit"
+done
+
+# 파일 순회
+for file in *.fastq; do
+    echo "Processing: $file"
+    # 파일 처리 명령어
+done
+
+# 숫자 범위 순회
+for i in {1..10}; do
+    echo "Number: $i"
+done
+
+# C 스타일 for 루프
+for ((i=0; i<5; i++)); do
+    echo "Index: $i"
+done
+```
+
+### 반복문 (while)
+
+```bash
+#!/bin/bash
+
+# 카운터 사용
+count=1
+while [ $count -le 5 ]; do
+    echo "Count: $count"
+    ((count++))
+done
+
+# 파일을 줄 단위로 읽기
+while read line; do
+    echo "Line: $line"
+done < input.txt
+```
+
+### 실전 예제: FASTQ 파일 처리
+
+```bash
+#!/bin/bash
+
+# FASTQ 파일들을 순회하며 품질 분석
+for fastq in *.fastq.gz; do
+    echo "Analyzing: $fastq"
+
+    # 읽기 수 계산
+    read_count=$(zcat "$fastq" | wc -l)
+    read_count=$((read_count / 4))
+
+    echo "Total reads: $read_count"
+done
+```
 
 ## 생명정보학에서의 리눅스 활용
 

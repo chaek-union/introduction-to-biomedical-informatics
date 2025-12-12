@@ -32,33 +32,33 @@
 
 ![사생진금도 - 고대 생물 분류의 예](assets/images/pictures-of-rare-animals-and-birds.png)
 
-**Figure 1.3** 사생진금도(写生珍禽图) - 고대 중국의 생물 분류 접근법 (황전, 903-965)
+**Figure 1.3** 사생진금도(写生珍禽图) - 고대 중국의 생물 분류 접근법 (황전, 903-965)[^1]
 
 시간이 흘러 현미경이 발명되고, 전자현미경 등이 등장하며 현대 생명과학의 근간이 되는 중요한 발견들이 이루어졌다. 각 발견은 현대 생명과학을 이루는 다양한 학문들의 시발점이 되었다.
 
 ![로버트 훅의 현미경](assets/images/hooke-microscope.png)
 
-**Figure 1.4** 로버트 훅이 사용한 현미경 (17세기)
+**Figure 1.4** 로버트 훅이 사용한 현미경 (17세기)[^2]
 
 - **세포생물학**: 현미경으로 코르크를 관찰함으로써 '세포(cell)' 가 처음 발견되었다. 추후 모든 생물이 세포로 이루어져 있음이 알려졌다. 이를 통해 **세포가 생명의 기본 단위**라는 개념이 확립되었다.
 
 ![로버트 훅의 코르크 관찰 - 세포의 최초 발견](assets/images/hooke-cork.png)
 
-**Figure 1.5** 로버트 훅의 코르크 관찰 - 세포(cell)의 최초 발견 (1665년)
+**Figure 1.5** 로버트 훅의 코르크 관찰 - 세포(cell)의 최초 발견 (1665년)[^3]
 
 ![세포 구조](assets/images/cell-structures.png)
 
-**Figure 1.6** 세포 구조 - 진핵세포와 원핵세포의 기본 구조
+**Figure 1.6** 세포 구조 - 세포 내부의 다양한 구성요소들[^4]
 
 - **분자생물학**: 세포의 내부를 관찰함으로써 DNA, RNA, 단백질 등의 분자를 발견하였다. DNA에서 RNA로, 그리고 단백질로 유전정보가 이어진다는 중심원리(Central Dogma)가 확립되었다. 이는 생명 현상을 이해하는 기본 틀이 되었다.
 
 ![Central Dogma - 유전정보의 흐름](assets/images/central-theorem.png)
 
-**Figure 1.7** Central Dogma - DNA에서 RNA, 단백질로 이어지는 유전정보의 흐름
+**Figure 1.7** Central Dogma - DNA에서 RNA, 단백질로 이어지는 유전정보의 흐름[^5]
 
 ![Central Dogma의 세부 메커니즘](assets/images/central-theorem-2.jpg)
 
-**Figure 1.8** Central Dogma의 세부 메커니즘 - 전사와 번역 과정
+**Figure 1.8** Central Dogma의 세부 메커니즘 - 전사와 번역 과정[^6]
 
 DNA가 생명의 설계도라는 것이 알려진 이후, 컴퓨터를 기반으로 이를 분석함으로써 생명을 이해해보려 하는 시도가 생겨났다. 이는 곧 현대 생물학의 중요한 관심사로 떠오르게 되었으며, "생명정보학" 이 등장하게 되는 계기가 되었다.
 
@@ -66,7 +66,7 @@ DNA가 생명의 설계도라는 것이 알려진 이후, 컴퓨터를 기반으
 
 ![데이터 축적량의 증가](assets/images/accumulation-of-data-nlm.png)
 
-**Figure 1.9** 생명과학 분야 데이터 축적량의 급격한 증가 (출처: NIH/NLM)
+**Figure 1.9** 생명과학 분야 데이터 축적량의 급격한 증가 (출처: NIH/NLM)[^7]
 
 ## 체학
 
@@ -94,7 +94,7 @@ DNA가 생명의 설계도라는 것이 알려진 이후, 컴퓨터를 기반으
 
 ![인간 유전체 해독 비용의 급격한 감소](assets/images/cost-per-human-genome.png)
 
-**Figure 1.10** 인간 유전체 해독 비용의 급격한 감소 (2001-2021)
+**Figure 1.10** 인간 유전체 해독 비용의 급격한 감소 (2001-2021)[^8]
 
 이외에도 기술의 진보는 다양한 -체학 분야에서 대량의 데이터 생산을 가능하게 하고 있다:
 - **유전체학/후성유전체학**: 차세대 시퀀싱(Next Generation Sequencing) 기술의 발전
@@ -105,15 +105,15 @@ DNA가 생명의 설계도라는 것이 알려진 이후, 컴퓨터를 기반으
 
 후성유전체학은 DNA 서열 자체의 변화 없이 유전자 발현을 조절하는 메커니즘을 연구하는 분야이다. 이 중에서 중요한 개념인 CpG island는 암 연구에서 특히 중요한 역할을 한다. CpG island는 DNA 상에서 시토신(C)과 구아닌(G) 염기가 인접하게 위치하는 부분이 집중적으로 나타나는 부위를 말한다.
 
-![CpG Island 메틸화와 유전자 발현 조절](assets/images/cpg-island.jpg)
+![CpG Island 메틸화와 유전자 발현 조절](assets/images/cpg-island.png)
 
-**Figure 1.11** CpG Island 메틸화와 유전자 발현 조절 메커니즘 
+**Figure 1.11** 정상 세포와 암세포에서의 CpG island 메틸화 패턴 비교[^9] 
 
 이러한 CpG island의 메틸화(methylation) 패턴은 유전자 발현 조절에 중요한 역할을 하며, 비정상적인 메틸화는 암의 발생과 밀접한 연관이 있다. 특히, 종양 억제 유전자의 프로모터 부위에 있는 CpG island가 과메틸화(hypermethylation)되면 해당 유전자의 발현이 억제되어 암 발생 위험이 증가할 수 있다. 반대로, 암 유전자(oncogene)의 프로모터 부위에 있는 CpG island가 저메틸화(hypomethylation)되면 해당 유전자의 발현이 증가하여 암 발생 위험이 증가할 수 있다.
 
-![정상 세포와 암세포에서의 메틸화 패턴 차이](assets/images/methelation.jpg)
+![정상 세포와 암세포에서의 후성유전학적 변화](assets/images/cancer-epigenomics.png)
 
-**Figure 1.12** 정상 대장 상피세포와 대장암에서의 메틸화 패턴 차이
+**Figure 1.12** 정상 세포와 암세포에서의 후성유전학적 변화 - DNA 메틸화 및 히스톤 변형 패턴[^10]
 
 ## 이미지 데이터
 
@@ -244,3 +244,14 @@ DICOM(Digital Imaging and Communications in Medicine)은 표준 의료영상/기
 ![계산생물학자의 역할 변화](assets/images/compbio-role-shift.png)
 
 **Figure 1.25** 계산생물학자의 역할 변화 - 과거 보조적 역할에서 현재 연구 주도적 역할로
+
+[^1]: 이미지 출처: https://commons.wikimedia.org/wiki/File:Huang-Quan-Xie-sheng-zhen-qin-tu.jpg
+[^2]: 이미지 출처: https://commons.wikimedia.org/wiki/File:Hooke-microscope.png
+[^3]: 이미지 출처: https://commons.wikimedia.org/wiki/File:Cork_Micrographia_Hooke.png
+[^4]: 이미지 출처: https://www.allencell.org/visual-guide-to-human-cells.html
+[^5]: 이미지 출처: https://www.cs.unm.edu/~wjust/CS523/Readings/Hughes2003.pdf
+[^6]: 이미지 출처: https://upload.wikimedia.org/wikipedia/commons/d/dd/Extended_Central_Dogma_with_Enzymes.jpg
+[^7]: 이미지 출처: https://www.nlm.nih.gov/about/2021CJ.html
+[^8]: 이미지 출처: https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Costs-Data
+[^9]: 이미지 출처: https://upload.wikimedia.org/wikipedia/commons/5/55/DNA_methylation_in_a_normal_cell_vs._in_a_cancer_cell.png
+[^10]: 이미지 출처: https://upload.wikimedia.org/wikipedia/commons/2/22/Normal-cancer-epigenome.png
