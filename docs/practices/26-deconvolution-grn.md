@@ -1,16 +1,16 @@
 # Deconvolution과 유전자 조절 네트워크 분석 실습
 
-## 26.1 개요
+## 개요
 
 이 장에서는 Bulk RNA-seq 데이터에서 세포 유형 비율을 추정하는 Deconvolution 기법과 유전자 조절 네트워크(Gene Regulatory Network, GRN) 분석을 파이썬으로 구현하는 실습을 다룬다. 차원 축소와 클러스터링 알고리즘의 수학적 원리에 대한 내용은 [11장 차원 축소와 데이터 분석](../theory/11-dimensionality-reduction-and-data-analysis.md)을 참조한다.
 
-## 26.2 Cellular Deconvolution
+## Cellular Deconvolution
 
-### 26.2.1 Deconvolution의 개념
+### Deconvolution의 개념
 
 Deconvolution은 scRNA-seq 데이터로부터 정의된 세포 유형을 기반으로 Bulk RNA-seq 데이터에 혼합되어 있는 각 세포 유형의 비율을 추정하는 기법이다. Bulk RNA-seq는 조직 전체의 평균 발현량을 측정하므로, 어떤 세포 유형이 얼마나 포함되어 있는지 직접 알 수 없다. Deconvolution을 통해 이 문제를 해결할 수 있다.
 
-### 26.2.2 수학적 모델
+### 수학적 모델
 
 Deconvolution 문제는 다음과 같은 행렬곱으로 표현할 수 있다:
 
@@ -26,7 +26,7 @@ M = W × H
 | W | (Sample) × (Cell type) | 각 샘플에서 세포 유형별 비율 행렬 |
 | H | (Cell type) × (Gene) | 세포 유형별 유전자 발현 시그니처 행렬 |
 
-### 26.2.3 해결 방법
+### 해결 방법
 
 이 문제는 Matrix Factorization 또는 Regression 문제로 해결할 수 있다:
 
@@ -36,19 +36,19 @@ M = W × H
 | Generalized Linear Model (GLM) | 선형 회귀 기반 추정 |
 | Support Vector Regression (SVR) | SVM 기반 회귀 |
 
-### 26.2.4 CIBERSORT
+### CIBERSORT
 
 CIBERSORT는 Support Vector Machine의 한 형태인 Nu-SVM을 사용하여 deconvolution 문제를 해결하는 대표적인 도구이다. 2015년 Nature Methods에 발표된 이후 1만 회 이상 인용되었다.
 
 참고: https://cibersortx.stanford.edu/
 
-## 26.3 유전자 조절 네트워크 (GRN)
+## 유전자 조절 네트워크 (GRN)
 
-### 26.3.1 GRN의 개념
+### GRN의 개념
 
 유전자 조절 네트워크는 유전자들 간의 발현 조절 관계를 네트워크로 표현한 것이다. 한 유전자의 발현이 다른 유전자의 발현에 영향을 줄 때, 이를 화살표(활성화) 또는 막대(억제)로 표시한다.
 
-### 26.3.2 GRN과 허브 유전자
+### GRN과 허브 유전자
 
 네트워크에서 중요한 유전자일수록 GRN의 "허브(hub)"일 확률이 높다. 허브 유전자는 많은 다른 유전자와 연결되어 있어 세포 기능에 핵심적인 역할을 한다. 그래프 이론에서는 이러한 중요도를 Centrality로 측정한다:
 
@@ -58,7 +58,7 @@ CIBERSORT는 Support Vector Machine의 한 형태인 Nu-SVM을 사용하여 deco
 | Betweenness Centrality | 최단 경로에 포함되는 빈도 |
 | PageRank | 중요한 노드로부터의 연결 가중치 |
 
-### 26.3.3 GRN 분석 도구
+### GRN 분석 도구
 
 전사체 데이터로부터 GRN을 생성하고 허브 유전자를 찾는 대표적인 알고리즘은 다음과 같다:
 
@@ -67,13 +67,13 @@ CIBERSORT는 Support Vector Machine의 한 형태인 Nu-SVM을 사용하여 deco
 | Bulk RNA-seq | WGCNA |
 | scRNA-seq | SCENIC, TENET |
 
-## 26.4 WGCNA
+## WGCNA
 
-### 26.4.1 WGCNA 개요
+### WGCNA 개요
 
 WGCNA(Weighted Gene Co-expression Network Analysis)는 유전자 발현 사이의 연관성 분석을 통해 공동 발현 네트워크를 생성하는 방법이다. 2008년 BMC Bioinformatics에 발표된 이후 20,000회 이상 인용되었다.
 
-### 26.4.2 인접 행렬 계산
+### 인접 행렬 계산
 
 WGCNA의 핵심은 유전자 쌍 간의 상관계수를 거듭제곱하여 인접 행렬을 구성하는 것이다:
 
@@ -83,7 +83,7 @@ a_ij = |cor(i, j)|^β
 
 여기서 β는 soft-thresholding power로, 높은 상관관계는 강조하고 낮은 상관관계는 억제하는 역할을 한다.
 
-### 26.4.3 TOM (Topological Overlap Matrix)
+### TOM (Topological Overlap Matrix)
 
 TOM은 두 유전자가 공유하는 이웃의 정도를 측정한다:
 
@@ -93,16 +93,16 @@ TOM_ij = (Σ_u a_iu × a_uj + a_ij) / (min(k_i, k_j) + 1 - a_ij)
 
 여기서 k_i는 유전자 i의 연결성(connectivity)이다. DistTOM = 1 - TOM으로 거리 행렬을 계산하여 계층적 클러스터링에 사용한다.
 
-## 26.5 실습 환경 구성
+## 실습 환경 구성
 
-### 26.5.1 작업 디렉토리 생성
+### 작업 디렉토리 생성
 
 ```bash
 $ mkdir -p ~/week11
 $ cd ~/week11
 ```
 
-### 26.5.2 UV 가상환경 설정
+### UV 가상환경 설정
 
 ```bash
 $ uv venv --python 3.13
@@ -110,13 +110,13 @@ $ source .venv/bin/activate
 $ uv pip install scanpy statsmodels scikit-learn networkx ipykernel seaborn matplotlib
 ```
 
-### 26.5.3 Jupyter 커널 등록
+### Jupyter 커널 등록
 
 ```bash
 $ python -m ipykernel install --user --name week11 --display-name "week11"
 ```
 
-### 26.5.4 데이터 파일 준비
+### 데이터 파일 준비
 
 실습에 사용할 데이터 파일을 심볼릭 링크한다.
 
@@ -124,9 +124,9 @@ $ python -m ipykernel install --user --name week11 --display-name "week11"
 $ ln -s /bce/lectures/2025-bioinformatics/data/deconvolution/count-data-diaphragm-annotated.h5ad .
 ```
 
-## 26.6 Deconvolution 실습
+## Deconvolution 실습
 
-### 26.6.1 데이터 로드 및 전처리
+### 데이터 로드 및 전처리
 
 ```python
 import scanpy as sc
@@ -151,7 +151,7 @@ sc.tl.umap(adata)
 sc.pl.umap(adata, color='cell_type')
 ```
 
-### 26.6.2 시그니처 행렬 생성
+### 시그니처 행렬 생성
 
 세포 유형별 유전자 발현 시그니처 행렬(H)을 생성한다.
 
@@ -166,7 +166,7 @@ for i, ct in enumerate(cell_types):
     sig[i] /= sig[i].max()
 ```
 
-### 26.6.3 Bulk 발현 데이터 시뮬레이션
+### Bulk 발현 데이터 시뮬레이션
 
 모든 세포의 발현량을 합하여 가상의 bulk 데이터를 생성한다.
 
@@ -175,7 +175,7 @@ v = np.asarray(adata.layers['raw'].sum(axis=0)).ravel()
 v = v / v.max()
 ```
 
-### 26.6.4 GLM을 이용한 Deconvolution
+### GLM을 이용한 Deconvolution
 
 Generalized Linear Model을 사용하여 세포 유형 비율을 추정한다.
 
@@ -190,7 +190,7 @@ result = model.fit()
 print(result.summary())
 ```
 
-### 26.6.5 Nu-SVR을 이용한 Deconvolution (CIBERSORT 방식)
+### Nu-SVR을 이용한 Deconvolution (CIBERSORT 방식)
 
 CIBERSORT에서 사용하는 Nu-SVR 방식으로 deconvolution을 수행한다.
 
@@ -205,7 +205,7 @@ clf = NuSVR(nu=0.25, kernel='linear')
 clf.fit(X, y)
 ```
 
-### 26.6.6 결과 비교
+### 결과 비교
 
 GLM과 CIBERSORT 결과를 실제 세포 비율과 비교한다.
 
@@ -237,7 +237,7 @@ axes[2].tick_params(axis='x', rotation=45)
 plt.tight_layout()
 ```
 
-### 26.6.7 다중 샘플 시뮬레이션
+### 다중 샘플 시뮬레이션
 
 랜덤하게 세포를 선택하여 여러 샘플을 시뮬레이션한다.
 
@@ -251,7 +251,7 @@ for i in range(samples):
     sums[i] = np.asarray(adata.layers['raw'][idx].sum(axis=0)).ravel()
 ```
 
-### 26.6.8 NMF를 이용한 Reference-free Deconvolution
+### NMF를 이용한 Reference-free Deconvolution
 
 세포 유형 시그니처 없이 NMF만으로 deconvolution을 수행한다.
 
@@ -263,7 +263,7 @@ W = nmf.fit_transform(sums)  # 비율 행렬
 H = nmf.components_          # 시그니처 행렬
 ```
 
-### 26.6.9 NMF 결과 검증
+### NMF 결과 검증
 
 추정된 시그니처가 실제 세포 유형과 얼마나 일치하는지 확인한다.
 
@@ -282,9 +282,9 @@ plt.xlabel('NMF Component')
 plt.ylabel('Sample')
 ```
 
-## 26.7 GRN 분석 실습
+## GRN 분석 실습
 
-### 26.7.1 데이터 준비
+### 데이터 준비
 
 특정 세포 유형만 선택하여 GRN 분석을 수행한다.
 
@@ -304,7 +304,7 @@ sc.pp.highly_variable_genes(adata_endo, n_top_genes=500)
 adata_endo = adata_endo[:, adata_endo.var.highly_variable]
 ```
 
-### 26.7.2 상관 행렬 및 인접 행렬 계산
+### 상관 행렬 및 인접 행렬 계산
 
 WGCNA의 핵심인 가중 상관 행렬을 계산한다.
 
@@ -321,7 +321,7 @@ connectivity_matrix = correlation_matrix > 0
 correlation_matrix = np.abs(correlation_matrix) ** beta
 ```
 
-### 26.7.3 TOM 계산
+### TOM 계산
 
 Topological Overlap Matrix를 계산한다.
 
@@ -339,7 +339,7 @@ for i in range(n):
 disttom = 1 - tom
 ```
 
-### 26.7.4 계층적 클러스터링
+### 계층적 클러스터링
 
 DistTOM을 사용하여 유전자를 모듈로 클러스터링한다.
 
@@ -349,7 +349,7 @@ from sklearn.cluster import AgglomerativeClustering
 clustering = AgglomerativeClustering(linkage='average', n_clusters=30).fit(disttom)
 ```
 
-### 26.7.5 네트워크 시각화
+### 네트워크 시각화
 
 NetworkX를 사용하여 특정 모듈의 네트워크를 시각화한다.
 
@@ -371,7 +371,7 @@ G.remove_edges_from(nx.selfloop_edges(G))
 G = nx.relabel_nodes(G, dict(enumerate(adata_endo.var.index[nodes])))
 ```
 
-### 26.7.6 Centrality 기반 시각화
+### Centrality 기반 시각화
 
 Degree centrality를 계산하여 허브 유전자를 시각화한다.
 
@@ -388,9 +388,9 @@ nx.draw_networkx_labels(G, pos, font_size=8)
 plt.show()
 ```
 
-## 26.8 SCENIC과 TENET
+## SCENIC과 TENET
 
-### 26.8.1 SCENIC
+### SCENIC
 
 SCENIC은 scRNA-seq 데이터를 위한 GRN 분석 도구로, WGCNA를 단일세포 데이터에 맞게 개선한 방법이다. 주요 단계는 다음과 같다:
 
@@ -401,13 +401,13 @@ SCENIC은 scRNA-seq 데이터를 위한 GRN 분석 도구로, WGCNA를 단일세
 
 참고: https://www.nature.com/articles/nmeth.4463
 
-### 26.8.2 TENET
+### TENET
 
 TENET은 pseudotime 기반으로 세포를 정렬한 후 transfer entropy를 계산하여 유전자 간 인과관계를 추론하는 방법이다.
 
 참고: https://academic.oup.com/nar/article/49/1/e1/5973444
 
-## 26.9 실습 과제
+## 실습 과제
 
 ### 실습 26.1: Deconvolution 분석
 

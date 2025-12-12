@@ -1,16 +1,16 @@
 # 딥러닝 기반 세포 유형 분류 실습
 
-## 27.1 개요
+## 개요
 
 이 장에서는 PyTorch Lightning을 사용하여 scRNA-seq 데이터로부터 세포 유형을 분류하는 딥러닝 모델을 구현하는 실습을 다룬다. 딥러닝의 기본 원리, 손실 함수, 신경망 아키텍처에 대한 이론적 내용은 [16장 인공지능과 의생명정보학의 미래](../theory/16-artificial-intelligence-and-biomedical-informatics.md)를 참조한다.
 
-## 27.2 PyTorch와 PyTorch Lightning
+## PyTorch와 PyTorch Lightning
 
-### 27.2.1 PyTorch
+### PyTorch
 
 PyTorch는 딥러닝 모델을 구축하고 훈련하기 위한 오픈소스 프레임워크이다. 동적 계산 그래프를 사용하여 직관적인 디버깅이 가능하며, GPU 가속을 통해 대규모 데이터셋에서도 효율적인 학습이 가능하다.
 
-### 27.2.2 PyTorch Lightning
+### PyTorch Lightning
 
 PyTorch Lightning은 PyTorch 코드를 더 정돈되고 간결한 방식으로 작성할 수 있게 해주는 고수준 라이브러리이다. "Focus on science, not engineering"이라는 철학 아래, 연구자가 모델 아키텍처와 학습 로직에 집중할 수 있도록 보일러플레이트 코드를 최소화한다.
 
@@ -25,23 +25,23 @@ PyTorch Lightning의 주요 특징은 다음과 같다:
 
 참고: https://lightning.ai/pytorch-lightning
 
-## 27.3 실습 환경 구성
+## 실습 환경 구성
 
-### 27.3.1 작업 디렉토리 생성
+### 작업 디렉토리 생성
 
 ```bash
 $ mkdir -p ~/week12
 $ cd ~/week12
 ```
 
-### 27.3.2 UV 가상환경 설정
+### UV 가상환경 설정
 
 ```bash
 $ uv venv --python 3.13
 $ source .venv/bin/activate
 ```
 
-### 27.3.3 PyTorch 설치
+### PyTorch 설치
 
 PyTorch 공식 사이트(https://pytorch.org/get-started/locally/)에서 Linux, pip, Python, CUDA를 선택하고 제시된 명령어를 실행한다.
 
@@ -49,27 +49,27 @@ PyTorch 공식 사이트(https://pytorch.org/get-started/locally/)에서 Linux, 
 $ uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
-### 27.3.4 추가 라이브러리 설치
+### 추가 라이브러리 설치
 
 ```bash
 $ uv pip install lightning scanpy tensorboard ipykernel scikit-learn
 ```
 
-### 27.3.5 Jupyter 커널 등록
+### Jupyter 커널 등록
 
 ```bash
 $ python -m ipykernel install --user --name week12 --display-name "week12"
 ```
 
-### 27.3.6 데이터 파일 준비
+### 데이터 파일 준비
 
 ```bash
 $ ln -s /bce/lectures/2025-bioinformatics/data/deconvolution/count-data-diaphragm-annotated.h5ad .
 ```
 
-## 27.4 딥러닝 모델 설계
+## 딥러닝 모델 설계
 
-### 27.4.1 LightningModule 구조
+### LightningModule 구조
 
 PyTorch Lightning에서는 LightningModule 클래스를 상속받아 딥러닝 모델을 정의한다. 구현해야 하는 주요 메소드는 다음과 같다:
 
@@ -81,7 +81,7 @@ PyTorch Lightning에서는 LightningModule 클래스를 상속받아 딥러닝 �
 | `training_step` | 학습 시 호출되는 메소드 |
 | `validation_step` | 검증 시 호출되는 메소드 |
 
-### 27.4.2 레이어 구성
+### 레이어 구성
 
 obs-by-feature 형식의 데이터를 처리할 때는 Fully Connected(Linear) 레이어를 사용한다. 일반적인 레이어 구성 순서는 다음과 같다:
 
@@ -98,7 +98,7 @@ Linear → ReLU → BatchNorm → Dropout
 | BatchNorm | 배치 정규화로 학습 안정화 |
 | Dropout | 과적합 방지를 위해 일부 뉴런 비활성화 |
 
-### 27.4.3 손실 함수 선택
+### 손실 함수 선택
 
 분류 문제에서 사용하는 손실 함수는 문제 유형에 따라 다르다:
 
@@ -110,9 +110,9 @@ Linear → ReLU → BatchNorm → Dropout
 
 세포 유형 분류는 다중 클래스 분류 문제이므로 CrossEntropyLoss를 사용한다.
 
-## 27.5 scRNA-seq 분류기 구현
+## scRNA-seq 분류기 구현
 
-### 27.5.1 필요 라이브러리 임포트
+### 필요 라이브러리 임포트
 
 ```python
 import torch
@@ -125,7 +125,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from pytorch_lightning.loggers import TensorBoardLogger
 ```
 
-### 27.5.2 모델 클래스 정의
+### 모델 클래스 정의
 
 ```python
 class SCRNAClassifier(pl.LightningModule):
@@ -169,7 +169,7 @@ class SCRNAClassifier(pl.LightningModule):
         return torch.optim.Adam(self.parameters(), lr=0.001)
 ```
 
-### 27.5.3 네트워크 구조
+### 네트워크 구조
 
 위 모델의 네트워크 구조는 다음과 같다:
 
@@ -180,9 +180,9 @@ Input (50) → Linear → ReLU → BatchNorm → Dropout (0.3)
            (128)                    (64)
 ```
 
-## 27.6 데이터 전처리
+## 데이터 전처리
 
-### 27.6.1 데이터 로드 및 전처리
+### 데이터 로드 및 전처리
 
 ```python
 adata = sc.read_h5ad('count-data-diaphragm-annotated.h5ad')
@@ -195,13 +195,13 @@ sc.pp.neighbors(adata, n_neighbors=15)
 sc.tl.umap(adata)
 ```
 
-### 27.6.2 UMAP 시각화
+### UMAP 시각화
 
 ```python
 sc.pl.umap(adata, color='cell_type', legend_loc='on data')
 ```
 
-### 27.6.3 학습/테스트 데이터 분리
+### 학습/테스트 데이터 분리
 
 ```python
 np.random.seed(42)
@@ -210,7 +210,7 @@ adata.obs['train_mask'] = mask
 adata.obs['test_mask'] = ~mask
 ```
 
-### 27.6.4 PyTorch 텐서 변환
+### PyTorch 텐서 변환
 
 ```python
 X = adata.obsm["X_pca"]
@@ -224,7 +224,7 @@ X_test = X[adata.obs['test_mask'].values]
 y_test = y[adata.obs['test_mask'].values]
 ```
 
-### 27.6.5 데이터로더 생성
+### 데이터로더 생성
 
 ```python
 train_loader = DataLoader(
@@ -238,9 +238,9 @@ test_loader = DataLoader(
 )
 ```
 
-## 27.7 모델 훈련
+## 모델 훈련
 
-### 27.7.1 트레이너 설정
+### 트레이너 설정
 
 ```python
 trainer = pl.Trainer(
@@ -253,13 +253,13 @@ trainer = pl.Trainer(
 model = SCRNAClassifier(50, len(set(y.numpy())))
 ```
 
-### 27.7.2 모델 훈련 실행
+### 모델 훈련 실행
 
 ```python
 trainer.fit(model, train_loader, test_loader)
 ```
 
-### 27.7.3 TensorBoard로 학습 과정 모니터링
+### TensorBoard로 학습 과정 모니터링
 
 ```python
 %load_ext tensorboard
@@ -268,31 +268,31 @@ trainer.fit(model, train_loader, test_loader)
 
 TensorBoard를 통해 train_loss, train_acc, val_loss, val_acc 등의 지표를 실시간으로 확인할 수 있다.
 
-## 27.8 모델 저장 및 로드
+## 모델 저장 및 로드
 
-### 27.8.1 체크포인트 저장
+### 체크포인트 저장
 
 ```python
 trainer.save_checkpoint("best_model.ckpt")
 ```
 
-### 27.8.2 체크포인트 로드
+### 체크포인트 로드
 
 ```python
 model = SCRNAClassifier.load_from_checkpoint("best_model.ckpt")
 model.eval()
 ```
 
-## 27.9 추론 및 결과 시각화
+## 추론 및 결과 시각화
 
-### 27.9.1 테스트 데이터 추론
+### 테스트 데이터 추론
 
 ```python
 with torch.no_grad():
     y_infer = model(X_test)
 ```
 
-### 27.9.2 결과 어노테이션
+### 결과 어노테이션
 
 ```python
 adata_test = adata[~mask].copy()
@@ -304,15 +304,15 @@ y_infer_labels = le.inverse_transform(y_infer_labels)
 adata_test.obs['y_infer'] = y_infer_labels
 ```
 
-### 27.9.3 결과 시각화
+### 결과 시각화
 
 ```python
 sc.pl.umap(adata_test, color=['cell_type', 'y_infer'], legend_loc='on data')
 ```
 
-## 27.10 scVI를 이용한 배치 효과 보정
+## scVI를 이용한 배치 효과 보정
 
-### 27.10.1 scVI 개요
+### scVI 개요
 
 scVI(single-cell Variational Inference)는 변분 오토인코더(VAE)를 기반으로 하는 단일세포 데이터 분석 도구이다. scVI는 딥러닝을 활용하여 배치 효과를 보정하고, 세포를 저차원 잠재 공간에 임베딩한다.
 
@@ -325,7 +325,7 @@ scVI의 생성 모델은 다음과 같은 확률 분포를 가정한다:
 | y_ng | Poisson | 관측된 카운트 |
 | h_ng | Bernoulli | 드롭아웃 여부 |
 
-### 27.10.2 scVI 설치 및 사용
+### scVI 설치 및 사용
 
 ```bash
 $ uv pip install scvi-tools
@@ -345,7 +345,7 @@ adata.obsm['X_scVI'] = model.get_latent_representation()
 
 scVI로 얻은 잠재 표현은 배치 효과가 보정된 상태로, 클러스터링이나 시각화에 활용할 수 있다.
 
-## 27.11 실습 과제
+## 실습 과제
 
 ### 실습 27.1: 기본 분류기 구현
 

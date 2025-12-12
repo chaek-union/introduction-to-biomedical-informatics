@@ -1,12 +1,12 @@
 # 주피터 노트북 기반 차등 발현 분석
 
-## 24.1 개요
+## 개요
 
 이 장에서는 VS Code의 주피터 노트북 환경에서 PyDESeq2를 사용하여 차등 발현 분석을 수행하는 방법을 다룬다. 차등 발현 분석의 이론적 배경과 통계적 원리에 대한 내용은 [9장 전사체학 기초](../theory/9-basic-transcriptomics.md)를 참조한다.
 
-## 24.2 실습 환경 구성
+## 실습 환경 구성
 
-### 24.2.1 VS Code 주피터 노트북 설정
+### VS Code 주피터 노트북 설정
 
 VS Code에서 주피터 노트북을 사용하려면 Jupyter 확장을 설치해야 한다.
 
@@ -14,7 +14,7 @@ VS Code에서 주피터 노트북을 사용하려면 Jupyter 확장을 설치해
 2. 검색창에 "Jupyter"를 입력한다.
 3. Microsoft에서 제공하는 Jupyter 확장을 설치한다.
 
-### 24.2.2 Python 패키지 설치
+### Python 패키지 설치
 
 차등 발현 분석에 필요한 패키지를 설치한다.
 
@@ -26,14 +26,14 @@ $ conda install pandas numpy matplotlib seaborn
 
 PyDESeq2는 R의 DESeq2를 Python으로 구현한 패키지로, RNA-seq 데이터의 차등 발현 분석에 사용된다.
 
-### 24.2.3 작업 디렉토리 생성
+### 작업 디렉토리 생성
 
 ```bash
 $ mkdir -p ~/week6/notebooks
 $ cd ~/week6
 ```
 
-### 24.2.4 노트북 파일 생성
+### 노트북 파일 생성
 
 VS Code에서 새 파일을 생성하고 `.ipynb` 확장자로 저장한다.
 
@@ -41,9 +41,9 @@ VS Code에서 새 파일을 생성하고 `.ipynb` 확장자로 저장한다.
 2. 파일명을 `deseq2_analysis.ipynb`로 저장
 3. 커널을 bioinfo conda 환경으로 선택
 
-## 24.3 데이터 준비
+## 데이터 준비
 
-### 24.3.1 카운트 행렬 로드
+### 카운트 행렬 로드
 
 STAR에서 생성된 ReadsPerGene.out.tab 파일들을 읽어 카운트 행렬을 생성한다.
 
@@ -82,7 +82,7 @@ gene-AT1G01040         789         812         756         654         678      
 gene-AT1G01050          45          52          48          67          71          65
 ```
 
-### 24.3.2 메타데이터 생성
+### 메타데이터 생성
 
 샘플의 실험 조건 정보를 담은 메타데이터 DataFrame을 생성한다.
 
@@ -109,7 +109,7 @@ SRR4420297     atrx1
 SRR4420298     atrx1
 ```
 
-### 24.3.3 데이터 필터링
+### 데이터 필터링
 
 발현량이 너무 낮은 유전자는 분석에서 제외한다.
 
@@ -123,9 +123,9 @@ print(f"필터링 전 유전자 수: {len(counts_df)}")
 print(f"필터링 후 유전자 수: {len(counts_filtered)}")
 ```
 
-## 24.4 PyDESeq2를 이용한 차등 발현 분석
+## PyDESeq2를 이용한 차등 발현 분석
 
-### 24.4.1 DESeq2 객체 생성
+### DESeq2 객체 생성
 
 PyDESeq2의 DeseqDataSet 객체를 생성한다.
 
@@ -143,7 +143,7 @@ dds = DeseqDataSet(
 
 design 파라미터는 R의 formula 문법을 따르며, `~condition`은 condition 열을 기준으로 그룹 간 차이를 분석한다는 의미이다.
 
-### 24.4.2 정규화 및 분산 추정
+### 정규화 및 분산 추정
 
 DESeq2 분석의 핵심 단계를 수행한다.
 
@@ -158,7 +158,7 @@ fit() 메서드는 내부적으로 다음 단계를 수행한다:
 2. 분산 추정: 유전자별 분산 추정 및 shrinkage 적용
 3. 음이항 분포 모델 피팅
 
-### 24.4.3 통계 검정
+### 통계 검정
 
 그룹 간 차등 발현을 검정한다.
 
@@ -197,9 +197,9 @@ gene-AT1G01050     58.00           0.523     0.234     2.235    0.0254    0.0856
 | pvalue | 원시 p-value |
 | padj | 다중 검정 보정된 p-value (Benjamini-Hochberg) |
 
-## 24.5 결과 분석 및 시각화
+## 결과 분석 및 시각화
 
-### 24.5.1 유의한 유전자 필터링
+### 유의한 유전자 필터링
 
 통계적으로 유의한 차등 발현 유전자를 추출한다.
 
@@ -219,7 +219,7 @@ print(f"  - 상향 조절: {sum(significant['log2FoldChange'] > 0)}")
 print(f"  - 하향 조절: {sum(significant['log2FoldChange'] < 0)}")
 ```
 
-### 24.5.2 화산 그림 (Volcano Plot)
+### 화산 그림 (Volcano Plot)
 
 화산 그림은 차등 발현 분석 결과를 시각화하는 대표적인 방법이다.
 
@@ -264,7 +264,7 @@ plt.show()
 
 화산 그림에서 x축은 발현량 변화의 크기(log2FC)를, y축은 통계적 유의성(-log10 p-value)을 나타낸다. 오른쪽 상단의 점들은 유의하게 상향 조절된 유전자를, 왼쪽 상단의 점들은 유의하게 하향 조절된 유전자를 나타낸다.
 
-### 24.5.3 MA Plot
+### MA Plot
 
 MA plot은 발현량과 변화량의 관계를 보여준다.
 
@@ -287,7 +287,7 @@ plt.savefig("ma_plot.png", dpi=150)
 plt.show()
 ```
 
-### 24.5.4 히트맵
+### 히트맵
 
 유의한 유전자들의 발현 패턴을 히트맵으로 시각화한다.
 
@@ -314,9 +314,9 @@ plt.savefig("heatmap.png", dpi=150)
 plt.show()
 ```
 
-## 24.6 결과 저장
+## 결과 저장
 
-### 24.6.1 전체 결과 저장
+### 전체 결과 저장
 
 분석 결과를 CSV 파일로 저장한다.
 
@@ -330,7 +330,7 @@ significant.to_csv("deseq2_results_significant.csv")
 print("결과가 저장되었습니다.")
 ```
 
-### 24.6.2 유전자 목록 추출
+### 유전자 목록 추출
 
 후속 분석(GO 분석, KEGG pathway 분석 등)을 위해 유전자 목록을 추출한다.
 
@@ -349,7 +349,7 @@ print(f"상향 조절 유전자: {len(upregulated)}개")
 print(f"하향 조절 유전자: {len(downregulated)}개")
 ```
 
-## 24.7 전체 분석 코드
+## 전체 분석 코드
 
 다음은 전체 분석 과정을 하나의 스크립트로 정리한 것이다.
 
@@ -405,7 +405,7 @@ significant.to_csv("deseq2_results_significant.csv")
 print(f"분석 완료: {len(significant)}개의 유의한 차등 발현 유전자 발견")
 ```
 
-## 24.8 실습 과제
+## 실습 과제
 
 ### 실습 24.1: 환경 설정
 

@@ -1,19 +1,19 @@
 # 변이 찾기 실습
 
-## 22.1 개요
+## 개요
 
 이 장에서는 BAM 파일로부터 유전 변이를 찾는 실습을 다룬다. 변이 찾기(Variant Calling)의 이론적 배경과 VCF 파일 형식에 대한 내용은 [4장 변이와 진화](../theory/4-variant-and-evolution.md)를 참조한다.
 
-## 22.2 실습 환경 구성
+## 실습 환경 구성
 
-### 22.2.1 작업 디렉토리 생성
+### 작업 디렉토리 생성
 
 ```bash
 $ mkdir -p ~/week5
 $ cd ~/week5
 ```
 
-### 22.2.2 Octopus 설치
+### Octopus 설치
 
 conda를 사용하여 Octopus를 설치한다.
 
@@ -24,9 +24,9 @@ $ conda install octopus
 
 Octopus는 최근 벤치마크에서 높은 성능을 보이는 variant caller로, local realignment 기능을 내장하고 있어 indel 주변에서의 정확한 변이 탐지가 가능하다.
 
-## 22.3 입력 파일 준비
+## 입력 파일 준비
 
-### 22.3.1 심볼릭 링크 생성
+### 심볼릭 링크 생성
 
 이전 실습에서 생성한 파일들을 week5 디렉토리로 심볼릭 링크한다.
 
@@ -36,7 +36,7 @@ $ ln -s ../week4/aligned.sorted.markdup.bam .
 $ ln -s ../week4/aligned.sorted.markdup.bam.bai .
 ```
 
-### 22.3.2 참조 유전체 준비
+### 참조 유전체 준비
 
 Octopus는 압축 해제된 참조 유전체와 faidx 파일을 필요로 한다.
 
@@ -47,9 +47,9 @@ $ samtools faidx reference.fa
 
 faidx 명령은 참조 유전체의 인덱스 파일(.fai)을 생성한다. 이 인덱스는 특정 유전체 영역에 빠르게 접근할 수 있게 해준다.
 
-## 22.4 Octopus를 이용한 변이 찾기
+## Octopus를 이용한 변이 찾기
 
-### 22.4.1 기본 실행
+### 기본 실행
 
 다음 명령어로 variant calling을 수행한다.
 
@@ -67,7 +67,7 @@ $ octopus -R reference.fa -I aligned.sorted.markdup.bam -o variants.vcf.gz
 
 실행 시간은 데이터 크기에 따라 다르며, 예제 데이터의 경우 약 4분이 소요된다.
 
-### 22.4.2 멀티스레드 실행
+### 멀티스레드 실행
 
 대용량 데이터의 경우 스레드 수를 지정하여 속도를 높일 수 있다.
 
@@ -75,9 +75,9 @@ $ octopus -R reference.fa -I aligned.sorted.markdup.bam -o variants.vcf.gz
 $ octopus -R reference.fa -I aligned.sorted.markdup.bam -o variants.vcf.gz --threads 8
 ```
 
-## 22.5 VCF 파일 확인
+## VCF 파일 확인
 
-### 22.5.1 파일 내용 확인
+### 파일 내용 확인
 
 생성된 VCF 파일의 내용을 확인한다.
 
@@ -87,7 +87,7 @@ $ zcat variants.vcf.gz | less
 
 VCF 파일은 헤더(##로 시작)와 본문(#CHROM으로 시작하는 컬럼 헤더 이후)으로 구성된다.
 
-### 22.5.2 VCF 필드 이해
+### VCF 필드 이해
 
 VCF 파일의 주요 필드는 다음과 같다:
 
@@ -105,7 +105,7 @@ VCF 파일의 주요 필드는 다음과 같다:
 
 VCF 형식에 대한 자세한 내용은 [4장 변이와 진화](../theory/4-variant-and-evolution.md)를 참조한다.
 
-### 22.5.3 변이 유형 구분
+### 변이 유형 구분
 
 REF와 ALT 필드를 비교하여 변이 유형을 판단할 수 있다:
 
@@ -114,9 +114,9 @@ REF와 ALT 필드를 비교하여 변이 유형을 판단할 수 있다:
 - **Deletion**: REF가 ALT보다 긴 경우 (예: TGG → T)
 - **MNV (Multiallelic Nucleotide Variant)**: ALT에 쉼표로 구분된 여러 대립유전자가 있는 경우
 
-## 22.6 ANNOVAR를 이용한 변이 주석
+## ANNOVAR를 이용한 변이 주석
 
-### 22.6.1 ANNOVAR 다운로드
+### ANNOVAR 다운로드
 
 ANNOVAR는 변이에 대한 기능적 주석을 추가하는 도구이다. ANNOVAR는 학술 목적으로 무료로 사용할 수 있으며, 다운로드를 위해서는 사용자 등록이 필요하다.
 
@@ -131,7 +131,7 @@ $ tar -xvzf annovar.latest.tar.gz
 
 압축 해제 후 annovar 디렉토리가 생성된다.
 
-### 22.6.2 ANNOVAR 실행 환경 설정
+### ANNOVAR 실행 환경 설정
 
 ANNOVAR 실행에 필요한 Perl 모듈을 설치한다.
 
@@ -139,7 +139,7 @@ ANNOVAR 실행에 필요한 Perl 모듈을 설치한다.
 $ conda install perl-pod-usage
 ```
 
-### 22.6.3 예제 파일 준비
+### 예제 파일 준비
 
 ANNOVAR 예제 파일을 심볼릭 링크한다.
 
@@ -147,7 +147,7 @@ ANNOVAR 예제 파일을 심볼릭 링크한다.
 $ ln -s annovar/example/ex2.vcf .
 ```
 
-### 22.6.4 ANNOVAR 실행
+### ANNOVAR 실행
 
 table_annovar.pl을 사용하여 변이 주석을 수행한다.
 
@@ -163,7 +163,7 @@ $ annovar/table_annovar.pl ex2.vcf annovar/humandb \
     -polish
 ```
 
-### 22.6.5 ANNOVAR 옵션 설명
+### ANNOVAR 옵션 설명
 
 주요 옵션:
 
@@ -183,7 +183,7 @@ operation 유형:
 | r (Region-based) | 알려진 유전체 영역(TF binding sites, 반복 영역 등)과의 중첩 확인 |
 | f (Filter-based) | 데이터베이스(dbSNP, gnomAD 등)에서 계산된 점수 참조 |
 
-### 22.6.6 결과 확인
+### 결과 확인
 
 주석이 추가된 VCF 파일을 확인한다.
 
@@ -191,9 +191,9 @@ operation 유형:
 $ less myanno.hg19_multianno.vcf
 ```
 
-## 22.7 유전변이 데이터베이스
+## 유전변이 데이터베이스
 
-### 22.7.1 주요 데이터베이스
+### 주요 데이터베이스
 
 변이 분석에 활용되는 주요 데이터베이스:
 
@@ -205,13 +205,13 @@ $ less myanno.hg19_multianno.vcf
 | OMIM | 인간 유전자와 유전 질환 카탈로그 |
 | COSMIC | 암 체세포 돌연변이 카탈로그 |
 
-### 22.7.2 Blacklist 영역
+### Blacklist 영역
 
 중복 영역이나 반복 서열 등 분석에서 제외해야 하는 영역을 blacklist로 관리한다. 이러한 영역에서 발견된 변이는 허위 양성(false positive)일 가능성이 높다.
 
-## 22.8 분석 파이프라인 개요
+## 분석 파이프라인 개요
 
-### 22.8.1 개인/약물 유전체 분석
+### 개인/약물 유전체 분석
 
 개인 유전체나 약물 유전체 분석의 전형적인 파이프라인:
 
@@ -223,11 +223,11 @@ $ less myanno.hg19_multianno.vcf
 6. Octopus 등 → VCF 파일
 7. dbSNP, OMIM 등 → 변이 주석
 
-### 22.8.2 질병 유전체 분석
+### 질병 유전체 분석
 
 종양-정상 쌍 분석의 경우 체세포 변이(somatic variant)를 찾기 위해 종양 샘플과 정상 샘플(주로 혈액)을 함께 분석한다. 이후 GSEA, KEGG, COSMIC 등의 데이터베이스를 활용하여 기능 분석을 수행한다.
 
-## 22.9 실습 과제
+## 실습 과제
 
 ### 실습 22.1: Octopus 실행
 

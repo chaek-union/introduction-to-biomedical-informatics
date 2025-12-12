@@ -1,12 +1,12 @@
 # 전사체 분석 파이프라인 구축
 
-## 23.1 개요
+## 개요
 
 이 장에서는 Snakemake를 활용하여 전사체 분석 파이프라인을 구축하는 방법을 다룬다. 전사체 분석의 이론적 배경, RNA-seq의 원리, 정량화 및 차등 발현 분석에 대한 내용은 [9장 전사체학 기초](../theory/9-basic-transcriptomics.md)를 참조한다.
 
-## 23.2 Snakemake 개요
+## Snakemake 개요
 
-### 23.2.1 Snakemake란
+### Snakemake란
 
 Snakemake는 파이썬 기반의 워크플로우 관리 도구로, 생명정보학 분석에서 재현 가능한 파이프라인을 구축하는 데 널리 사용된다. Snakemake의 주요 특징은 다음과 같다:
 
@@ -15,7 +15,7 @@ Snakemake는 파이썬 기반의 워크플로우 관리 도구로, 생명정보�
 - 파일 의존성을 자동으로 추적하여 필요한 작업만 수행한다.
 - 쉘 명령뿐만 아니라 파이썬 코드나 Jupyter 노트북도 실행할 수 있다.
 
-### 23.2.2 Snakemake 설치
+### Snakemake 설치
 
 conda를 사용하여 Snakemake를 설치한다.
 
@@ -24,7 +24,7 @@ $ conda activate bioinfo
 $ conda install snakemake
 ```
 
-### 23.2.3 기본 문법
+### 기본 문법
 
 Snakemake 워크플로우는 `Snakefile`에 정의되며, 각 작업은 `rule`로 표현된다.
 
@@ -53,7 +53,7 @@ rule bwa_map:
 
 위 규칙을 실행하면 `bwa mem` 명령이 수행되어 `mapped_reads/A.bam` 파일이 생성된다.
 
-### 23.2.4 와일드카드 사용
+### 와일드카드 사용
 
 Snakemake에서는 와일드카드를 사용하여 여러 샘플에 대해 동일한 규칙을 적용할 수 있다.
 
@@ -74,7 +74,7 @@ rule bwa_map:
 $ snakemake --cores 1 mapped_reads/A.bam mapped_reads/B.bam
 ```
 
-### 23.2.5 실행 블록 유형
+### 실행 블록 유형
 
 Snakemake는 세 가지 실행 블록을 지원한다:
 
@@ -106,7 +106,7 @@ rule example_run:
             f.write(data.upper())
 ```
 
-### 23.2.6 규칙 연결
+### 규칙 연결
 
 여러 규칙을 정의하면 Snakemake가 파일 의존성을 자동으로 추적하여 순차적으로 실행한다.
 
@@ -128,9 +128,9 @@ rule rule2:
 $ snakemake --cores 1 파일3
 ```
 
-## 23.3 RNA-seq 분석 파이프라인
+## RNA-seq 분석 파이프라인
 
-### 23.3.1 파이프라인 구조
+### 파이프라인 구조
 
 전사체 분석 파이프라인은 다음과 같은 단계로 구성된다:
 
@@ -139,7 +139,7 @@ $ snakemake --cores 1 파일3
 3. **정렬 (STAR)**: 스플라이스 인식 정렬을 수행한다.
 4. **정량화**: 유전자별 리드 카운트를 계산한다.
 
-### 23.3.2 실습 환경 구성
+### 실습 환경 구성
 
 작업 디렉토리를 생성하고 필요한 도구를 설치한다.
 
@@ -150,7 +150,7 @@ $ conda activate bioinfo
 $ conda install star cutadapt fastqc
 ```
 
-### 23.3.3 STAR 인덱스 생성
+### STAR 인덱스 생성
 
 STAR 정렬을 위해서는 참조 유전체 인덱스가 필요하다. 인덱스 생성에는 참조 유전체 FASTA 파일과 유전자 주석 GTF 파일이 필요하다.
 
@@ -182,7 +182,7 @@ $ STAR --runThreadN 4 \
        --sjdbGTFfile /bce/omics/references/arabidopsis/GCF_000001735.4/GCF_000001735.4_TAIR10.1_genomic.gtf
 ```
 
-### 23.3.4 Snakefile 작성
+### Snakefile 작성
 
 전체 파이프라인을 정의하는 Snakefile을 작성한다.
 
@@ -262,7 +262,7 @@ rule star_align:
         """
 ```
 
-### 23.3.5 파이프라인 실행
+### 파이프라인 실행
 
 파이프라인을 실행하기 전에 dry-run으로 실행 계획을 확인한다:
 
@@ -282,7 +282,7 @@ $ snakemake --cores 4
 $ snakemake --cores 4 star_output/SRR4420293/ReadsPerGene.out.tab
 ```
 
-### 23.3.6 주요 Snakemake 옵션
+### 주요 Snakemake 옵션
 
 | 옵션 | 설명 |
 |---|---|
@@ -292,9 +292,9 @@ $ snakemake --cores 4 star_output/SRR4420293/ReadsPerGene.out.tab
 | --printshellcmds (-p) | 실행되는 쉘 명령 출력 |
 | --dag | 의존성 그래프를 DOT 형식으로 출력 |
 
-## 23.4 STAR 출력 파일
+## STAR 출력 파일
 
-### 23.4.1 ReadsPerGene.out.tab 파일
+### ReadsPerGene.out.tab 파일
 
 STAR의 `--quantMode GeneCounts` 옵션을 사용하면 유전자별 리드 카운트가 포함된 파일이 생성된다.
 
@@ -320,15 +320,15 @@ $ head star_output/SRR4420293/ReadsPerGene.out.tab
 | N_noFeature | 유전자 영역에 해당하지 않는 리드 수 |
 | N_ambiguous | 여러 유전자에 걸친 리드 수 |
 
-### 23.4.2 Strandedness 확인
+### Strandedness 확인
 
 RNA-seq 라이브러리는 방향성(strandedness)에 따라 unstranded, forward stranded, reverse stranded로 구분된다. 실험에 사용된 라이브러리 유형에 맞는 열을 선택해야 한다.
 
 방향성을 확인하려면 2열, 3열, 4열의 합계를 비교한다. 대부분의 카운트가 특정 열에 집중되어 있다면 해당 방향의 stranded 라이브러리이다.
 
-## 23.5 고급 Snakemake 기능
+## 고급 Snakemake 기능
 
-### 23.5.1 expand 함수
+### expand 함수
 
 `expand` 함수는 와일드카드를 여러 값으로 확장한다.
 
@@ -337,7 +337,7 @@ expand("data/{sample}/processed.txt", sample=["A", "B", "C"])
 # 결과: ["data/A/processed.txt", "data/B/processed.txt", "data/C/processed.txt"]
 ```
 
-### 23.5.2 multiext 함수
+### multiext 함수
 
 `multiext` 함수는 하나의 기본 경로에 여러 확장자를 추가한다.
 
@@ -346,7 +346,7 @@ multiext("results/sample1", ".pdf", ".txt", ".png")
 # 결과: ["results/sample1.pdf", "results/sample1.txt", "results/sample1.png"]
 ```
 
-### 23.5.3 설정 파일 사용
+### 설정 파일 사용
 
 복잡한 파이프라인에서는 설정을 별도의 YAML 파일로 분리할 수 있다.
 
@@ -368,7 +368,7 @@ SAMPLES = config["samples"]
 REFERENCE_DIR = config["reference_dir"]
 ```
 
-## 23.6 실습 과제
+## 실습 과제
 
 ### 실습 23.1: Snakemake 설치 및 기본 실행
 
